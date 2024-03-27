@@ -1,0 +1,52 @@
+﻿@model IEnumerable<TP_test.Models.Panier>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Historique</h1>
+
+@if (Model == null || Model.Count() == 0)
+{
+    <span>Votre historique de commandes est vide.</span>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.UserGuid)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TimeAchat)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ProduitPanier!.First().Quantite)
+                </th>
+
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UserGuid)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TimeAchat)
+                    </td>
+                    <td>
+                        @{var quantite = item.ProduitPanier!.Sum(x => x.Quantite);}
+                        @Html.DisplayFor(modelItem => quantite)
+                    </td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.ID">Details</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

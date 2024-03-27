@@ -1,0 +1,60 @@
+﻿@model IEnumerable<TP_test.Models.ProduitPanier>
+
+@{
+    ViewData["Title"] = "Panier";
+}
+
+<h1>Panier</h1>
+
+@if (Model == null || Model.Count() == 0)
+{
+    <span>Votre panier est vide.</span>
+}
+else
+{
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Produit!.Image)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Produit!.Nom)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Produit!.Taille)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Quantite)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @if (item.Produit!.ImageID != null)
+                            {
+                                <img src="@string.Format("data:{1};base64,{0}", Convert.ToBase64String(item.Produit.Image!.ImageData), item.Produit.Image.ContentType)" width="75" height="75" />
+                            }
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Produit.Nom)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Produit.Taille)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Quantite)
+                        </td>
+                        <td>
+                            <a type="button" class="btn btn-primary" asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    <a type="button" class="btn btn-primary" asp-action="AcheterPanier" asp-route-id="@Model.First().PanierID">Acheter!</a>
+}

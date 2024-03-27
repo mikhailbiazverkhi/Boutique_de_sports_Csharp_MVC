@@ -1,0 +1,79 @@
+﻿@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@model IEnumerable<TP_test.Models.ProduitPanier>
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Historique</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.First().Panier!.TimeAchat)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.First().Panier!.TimeAchat)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.First().Panier!.UserGuid)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.First().Panier!.UserGuid)
+        </dd>
+    </dl>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Produit!.Image)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Produit!.Nom)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Produit!.Taille)
+            </th>
+            <th>          
+                @Html.DisplayName("Quantite")
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @if (item.Produit!.ImageID != null)
+                    {
+                        <img src="@string.Format("data:{1};base64,{0}", Convert.ToBase64String(item.Produit.Image.ImageData), item.Produit.Image.ContentType)" width="75" height="75" />
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Produit.Nom)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Produit.Taille)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantite)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@if ((await AuthorizationService.AuthorizeAsync(User, "Administration")).Succeeded)
+{
+    <div>
+        <a asp-action="IndexAdmin">Back to List</a>
+    </div>
+}
+else if (User.Identity!.IsAuthenticated)
+{
+    <a asp-action="Index">Back to List</a>
+}
+
